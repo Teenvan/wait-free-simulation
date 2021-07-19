@@ -10,6 +10,24 @@ namespace WaitFreeSimulation
     helpQueue {std::move(h)}
     {}
 
+    int WaitFreeSimulator::casExecutor(const Cases &cases) const
+    {
+        for (const auto& cas : cases)
+        {
+            auto rcode = cas.execute();
+            if (rcode == -1)
+            {
+                // Error
+                // Record contention
+                return rcode;
+            }
+                   
+        }
+
+        // No error so return a positive result code
+        return 1;
+    }
+
     void WaitFreeSimulator::helpMakeProgress()
     {
         if (auto help = helpQueue.peek()) 

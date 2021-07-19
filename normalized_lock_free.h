@@ -17,7 +17,6 @@ class NormalizedLockFree
     public:
 
         Cases generator(const Operation& op) const;
-        int   execute(const Cases& c, ContentionMeasure& cm) const;
         void  wrapUp(const Cases& performed) const;
 };
 }
