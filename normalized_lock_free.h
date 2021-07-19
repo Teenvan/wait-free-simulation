@@ -12,12 +12,12 @@ namespace WaitFreeSimulation
 {
 class NormalizedLockFree 
 {
-    typedef std::vector<CasDescriptor> Cases;
+    using Cases = std::vector<CasDescriptor>;
 
     public:
 
-        Cases prepare(Operation& op);
-        int   execute(const Cases& c, ContentionMeasure& cm);
-        void  cleanup();
+        Cases generator(const Operation& op) const;
+        int   execute(const Cases& c, ContentionMeasure& cm) const;
+        void  wrapUp(const Cases& performed) const;
 };
 }

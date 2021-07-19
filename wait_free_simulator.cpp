@@ -27,14 +27,14 @@ namespace WaitFreeSimulation
         }
 
         auto contention = ContentionMeasure();
-        const auto& cases =  algorithm.prepare(op);
+        const auto& cases =  algorithm.generator(op);
         const int rcode = algorithm.execute(cases, contention);
         
         if (rcode == -1)
         {
             // Success
             // fast-path
-            algorithm.cleanup();
+            algorithm.wrapUp();
         } else {
             // Error
             // slow-path : ask for help
