@@ -16,9 +16,9 @@ class NormalizedLockFree
 
     public:
 
-        Cases generator(const Operation& op) const;
+        Cases generator(const Operation& op, ContentionMeasure& cm) const;
         // Wrap up takes in the outcome of the execution
         // Wrap runs regardless if execute succeeded or not
-        int  wrapUp(const Cases& performed, int executed) const;
+        int  wrapUp(const Cases& performed, int executed, ContentionMeasure& cm) const;
 };
 }
