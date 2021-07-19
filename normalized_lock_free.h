@@ -17,6 +17,8 @@ class NormalizedLockFree
     public:
 
         Cases generator(const Operation& op) const;
-        void  wrapUp(const Cases& performed) const;
+        // Wrap up takes in the outcome of the execution
+        // Wrap runs regardless if execute succeeded or not
+        int  wrapUp(const Cases& performed, int executed) const;
 };
 }

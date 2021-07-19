@@ -10,7 +10,7 @@ namespace WaitFreeSimulation
     helpQueue {std::move(h)}
     {}
 
-    int WaitFreeSimulator::casExecutor(const Cases &cases) const
+    int WaitFreeSimulator::casExecutor(const Cases &cases, ContentionMeasure& cm) const
     {
         for (const auto& cas : cases)
         {
@@ -19,6 +19,7 @@ namespace WaitFreeSimulation
             {
                 // Error
                 // Record contention
+                cm.detected();
                 return rcode;
             }
                    
@@ -36,36 +37,50 @@ namespace WaitFreeSimulation
         }
     }
 
-    Result WaitFreeSimulator::run(Operation &op)
+    int WaitFreeSimulator::run(Operation &op)
     {
-        
-        if (false) 
+        int retry = 0;
+        while (retry >= 0)
         {
-            helpMakeProgress();
-        }
-
-        auto contention = ContentionMeasure();
-        const auto& cases =  algorithm.generator(op);
-        const int rcode = algorithm.execute(cases, contention);
-        
-        if (rcode == -1)
-        {
-            // Success
-            // fast-path
-            algorithm.wrapUp();
-        } else {
-            // Error
-            // slow-path : ask for help
-            // rcode refers to the position where we started failing
-            Help help(rcode);
-            helpQueue.add(help);
-            // Using sequentially consistent ordering
-            while (!help.completed.load(std::memory_order_seq_cst))
-            {
-                helpMakeProgress();
+            bool helpNeeded = /* Once in a while */false;
+            if (retry == 0) {
+                if (helpNeeded)
+                {
+                    helpMakeProgress();
+                } else {
+                    // helping
+                }
             }
+
+            auto contention = ContentionMeasure();
+            const auto& cases =  algorithm.generator(op);
+            const int rcode = casExecutor(cases, contention);
+            const auto& result = algorithm.wrapUp(cases, rcode);
+
+            if (result != -1) {
+                // Wrap-up was successful
+                return result;
+            } else {
+                continue;
+            }
+
+            /*
+            if (rcode != -1)
+            {
+                // Error
+                // slow-path : ask for help
+                // rcode refers to the position where we started failing
+                Help help(rcode);
+                helpQueue.add(help);
+                // Using sequentially consistent ordering
+                while (!help.completed.load(std::memory_order_seq_cst))
+                {
+                    helpMakeProgress();
+                }
+            }
+            */
+
+            ++retry;
         }
-        
-        return Result();
     }   
 }

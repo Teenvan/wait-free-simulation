@@ -11,9 +11,9 @@ namespace WaitFreeSimulation
 
         public:
             WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue h);
-            Result run(Operation& op);
+            int run(Operation& op);
             void helpMakeProgress();
-            int casExecutor(const Cases& cases) const;
+            int casExecutor(const Cases& cases, ContentionMeasure& cm) const;
 
         private:
             NormalizedLockFree algorithm;
