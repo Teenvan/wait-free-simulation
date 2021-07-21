@@ -2,7 +2,14 @@
 
 Implementation of a wait-free simulation for a lock-free algorithm as described in the paper - A Practical Wait-Free Simulation for Lock-Free Data Structures
 
-# Example of a Linked-list insertion
+# Components of the algorithm
+1. Normalized Lock Free Form
+2. Wait-free queue
+3. Contention Measure
+4. Cas Descriptor
+5. Wait-Free simulator
+
+# The ABA problem
 
 This section maybe a little convoluted. It is a WIP.
 
@@ -51,10 +58,13 @@ and now ...
 insert of B continues.
 
 CAS(head, 0x1, 0x2)
+-> this CAS should have failed ideally
 
 head -> B -> A(@0x1) actually D(@0x1) -> C(@0x3)
 
 Even though the last CAS happened to succeed since the values were same, but the thing we are pointing aren't really the same.
+
+This is known as the ABA problem. 
 
 ## References
 1. [Full length Paper](http://cs.technion.ac.il/~erez/Papers/wf-simulation-full.pdf)
