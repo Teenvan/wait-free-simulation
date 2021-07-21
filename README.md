@@ -4,6 +4,8 @@ Implementation of a wait-free simulation for a lock-free algorithm as described 
 
 # Example of a Linked-list insertion
 
+This section maybe a little convoluted. It is a WIP.
+
 Say, the head of a linked list points to a node A
 
 head -> A (@0x1)
@@ -16,7 +18,43 @@ We do this using a compare_and_swap primitive.
 
 CAS(head, 0x1, 0x2)
     -> Succeed if A is still at the head
-    -> fail if A is no longer at the head (maybe due to the insertion from another thread)
+    -> fail if A is no longer at the head (maybe due to the insertion from another thread), because B.next would need to be different.
+
+However, there is a possibilty of a problem.
+
+Imagine someone else meanwhile 
+
+insert C (@0x3); C.next = 0x1
+
+CAS(head, 0x1, 0x3)
+
+Now lets imagine someone removes A
+
+remove A
+
+CAS(C.next, 0x1, 0x0)
+
+Now if someone inserts a node D
+
+insert D (@0x1); and D.next = 0x3
+
+C is at the head
+
+CAS(head, 0x3, 0x1)
+
+So the final LL
+
+head -> D -> C -> .
+
+and now ...
+
+insert of B continues.
+
+CAS(head, 0x1, 0x2)
+
+head -> B -> A(@0x1) actually D(@0x1) -> C(@0x3)
+
+Even though the last CAS happened to succeed since the values were same, but the thing we are pointing aren't really the same.
 
 ## References
 1. [Full length Paper](http://cs.technion.ac.il/~erez/Papers/wf-simulation-full.pdf)
