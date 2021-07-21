@@ -53,9 +53,9 @@ namespace WaitFreeSimulation
             }
 
             auto contention = ContentionMeasure();
-            const auto& cases =  algorithm.generator(op);
+            const auto& cases =  algorithm.generator(op, contention);
             const int rcode = casExecutor(cases, contention);
-            const auto& result = algorithm.wrapUp(cases, rcode);
+            const auto& result = algorithm.wrapUp(cases, rcode, contention);
 
             if (result != -1) {
                 // Wrap-up was successful
