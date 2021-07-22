@@ -2,7 +2,14 @@
 
 namespace WaitFreeSimulation
 {
-    OperationRecordBox::OperationRecordBox(OperationRecord* value)
+    template <class O>
+    OperationRecordBox<O>::OperationRecordBox(OperationRecord<O>* value)
     : v(value)
     {}
+
+    template <class O>
+    std::atomic<OperationRecord<O>*> OperationRecordBox<O>::operationPointer() const
+    {
+        return v;
+    }
 }

@@ -3,14 +3,18 @@
 #include <cstdint>
 
 namespace WaitFreeSimulation
-{
+{   
+    template<class O>
     class OperationRecord
     {
         public:
             bool completed;
             uint32_t at;
-            OperationRecord(uint32_t current);
+            uint32_t ownerTid; // Owner thread identifier
+            O operation;
+            
+            OperationRecord(uint64_t current);
             // Copy constructor
-            OperationRecord(OperationRecord& otherRecord);   
+            OperationRecord(OperationRecord<O>& otherRecord);   
     };
 }

@@ -9,12 +9,13 @@
 
 namespace WaitFreeSimulation
 {
+    template <class O>
     class WaitFreeQueue
     {
         public:
             // Add takes in a description of help
-            void add(OperationRecordBox* help);
-            std::shared_ptr<OperationRecord> peek() const;
-            bool tryRemoveFront(OperationRecord& completed);
+            void add(OperationRecordBox<O>* help);
+            OperationRecordBox<O>* peek() const;
+            bool tryRemoveFront(OperationRecordBox<O>* completed);
     };
 }
