@@ -9,14 +9,25 @@ namespace WaitFreeSimulation
     : ownerTid(owner),
     input(i),
     state(s),
-    casDescriptors(std::move(cases))
+    casDescriptors(std::move(cases)),
+    completed(false)
     {}
 
     OperationRecord::OperationRecord(OperationRecord& otherRecord)
     : ownerTid(otherRecord.ownerTid),
     input(otherRecord.input),
     state(otherRecord.state),
-    casDescriptors(std::move(otherRecord.casDescriptors))
+    casDescriptors(std::move(otherRecord.casDescriptors)),
+    completed(otherRecord.completed)
     {}
+
+    bool OperationRecord::isCompleted() const
+    {
+        if (state == OperationState::Completed)
+        {
+            return true;
+        }
+        return false;
+    }
 
 }

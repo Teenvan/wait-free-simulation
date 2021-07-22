@@ -13,6 +13,7 @@ namespace WaitFreeSimulation
         public:
             WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue h);
             int run(Input& op);
+            void helpOp(OperationRecordBox* opRecord);
             void helpMakeProgress();
             int casExecutor(const Cases& cases, ContentionMeasure& cm) const;
 

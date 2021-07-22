@@ -41,19 +41,38 @@ namespace WaitFreeSimulation
         // }
     }
 
+    // Guarantees that on return , orb is no longer in help queue
+    void WaitFreeSimulator::helpOp(OperationRecordBox* orb)
+    {
+        auto _or = orb->v.load(std::memory_order_seq_cst);
+        switch (_or->state)
+        {
+            case OperationState::Completed:
+                helpQueue.tryRemoveFront(orb);
+                break;
+            case OperationState::PreCas:
+                break;
+            case OperationState::ExecuteCas:
+                break;
+            case OperationState::PostCas:
+                break;
+        }
+    }
+
     int WaitFreeSimulator::run(Input& op)
     {
         // You can keep retrying the fast path
         // until a certain point which is based on contention
         // or a predetermined retry threshold.
+
         int retry = 0;
+        bool helpNeeded = /* Once in a while */ true;
+        if (helpNeeded)
+        {
+            helpMakeProgress();
+        }
         while (retry >= 0)
         {
-            bool helpNeeded = /* Once in a while */ true;
-            if (helpNeeded)
-            {
-                helpMakeProgress();
-            }
             auto contention = ContentionMeasure();
 
             if (contention.use_slow_path()) {
@@ -105,11 +124,13 @@ namespace WaitFreeSimulation
             helpQueue.add(&box);
             // Using sequentially consistent ordering
             // While we haven't completed, we will keep on helpin g
-            while (!box.v.load(std::memory_order_seq_cst)->completed)
+            while (!box.v.load(std::memory_order_seq_cst)->isCompleted())
             {
                 // This will be a safe operation once we have hazard pointers
                 helpMakeProgress();
             }
+
+            // Extract value from completed
         }
     }   
 }
