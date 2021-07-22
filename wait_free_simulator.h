@@ -5,20 +5,20 @@
 
 namespace WaitFreeSimulation
 {
-    template <class O>
+    template <class I, class O>
     class WaitFreeSimulator
     {
         using Cases = std::vector<CasDescriptor>;
 
         public:
-            WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue<O> h);
+            WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue<I, O> h);
             int run(Operation& op);
             void helpMakeProgress();
             int casExecutor(const Cases& cases, ContentionMeasure& cm) const;
 
         private:
             NormalizedLockFree algorithm;
-            WaitFreeQueue<O> helpQueue;
+            WaitFreeQueue<I, O> helpQueue;
             const int RETRY_THRESHOLD = 2;
     };
 }

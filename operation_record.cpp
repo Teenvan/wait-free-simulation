@@ -5,14 +5,14 @@
 
 namespace WaitFreeSimulation
 {
-    template <class O>
-    OperationRecord<O>::OperationRecord(uint64_t current) 
+    template <class I, class O>
+    OperationRecord<I, O>::OperationRecord(uint64_t current) 
     : completed(false),
     at(current)
     {}
 
-    template <class O>
-    OperationRecord<O>::OperationRecord(OperationRecord<O>& otherRecord):
+    template <class I, class O>
+    OperationRecord<I, O>::OperationRecord(OperationRecord<I, O>& otherRecord):
     completed(otherRecord.completed), at(otherRecord.at)
     {}
 

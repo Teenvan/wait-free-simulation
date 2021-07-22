@@ -5,13 +5,13 @@
 
 namespace WaitFreeSimulation
 {
-    template<class O>
+    template<class I, class O>
     class OperationRecordBox
     {
         public:
-            OperationRecordBox(OperationRecord<O>* v);
-            std::atomic<OperationRecord<O>*> operationPointer() const;
+            OperationRecordBox(OperationRecord<I, O>* v);
+            std::atomic<OperationRecord<I, O>*> operationPointer() const;
         private:    
-            std::atomic<OperationRecord<O>*> v;
+            std::atomic<OperationRecord<I, O>*> v;
     };
 }

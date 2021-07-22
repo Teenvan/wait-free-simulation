@@ -5,14 +5,14 @@
 
 namespace WaitFreeSimulation
 {
-    template <class O>
-    WaitFreeSimulator<O>::WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue<O> h)
+    template <class I, class O>
+    WaitFreeSimulator<I, O>::WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue<I, O> h)
     : algorithm(std::move(l)),
     helpQueue(std::move(h))
     {}
 
-    template <class O>
-    int WaitFreeSimulator<O>::casExecutor(const Cases &cases, ContentionMeasure& cm) const
+    template <class I, class O>
+    int WaitFreeSimulator<I, O>::casExecutor(const Cases &cases, ContentionMeasure& cm) const
     {
         for (const auto& cas : cases)
         {
@@ -31,8 +31,8 @@ namespace WaitFreeSimulation
         return 1;
     }
 
-    template <class O>
-    void WaitFreeSimulator<O>::helpMakeProgress()
+    template <class I, class O>
+    void WaitFreeSimulator<I, O>::helpMakeProgress()
     {
         if (auto help = helpQueue.peek()) 
         {
@@ -40,8 +40,8 @@ namespace WaitFreeSimulation
         }
     }
 
-    template <class O>
-    int WaitFreeSimulator<O>::run(Operation &op)
+    template <class I, class O>
+    int WaitFreeSimulator<I, O>::run(Operation &op)
     {
         // You can keep retrying the fast path
         // until a certain point which is based on contention
@@ -94,8 +94,8 @@ namespace WaitFreeSimulation
             // Error
             // slow-path : ask for help
             // rcode refers to the position where we started failing
-            OperationRecord<O> record(rcode);
-            OperationRecordBox<O> box(&record);
+            OperationRecord<I, O> record(rcode);
+            OperationRecordBox<I, O> box(&record);
             // Enqueue the pointer to the record box
             helpQueue.add(&box);
             // Using sequentially consistent ordering
