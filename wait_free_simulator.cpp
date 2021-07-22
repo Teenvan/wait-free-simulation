@@ -2,6 +2,7 @@
 #include "wait_free_queue.h"
 #include "cas_descriptor.h"
 #include "operation_record_box.h"
+#include "operation_state.h"
 #include <atomic>
 #include <utility>
 #include <thread>
@@ -94,9 +95,10 @@ namespace WaitFreeSimulation
             // slow-path : ask for help
             // rcode refers to the position where we started failing
             OperationRecord record(
-                std::this_thread::get_id,
+                std::this_thread::get_id(),
                 op,
-
+                OperationState::PreCas,
+                NULL
             );
             OperationRecordBox box(&record);
             // Enqueue the pointer to the record box

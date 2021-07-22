@@ -5,7 +5,7 @@
 namespace WaitFreeSimulation
 {
     OperationRecord::OperationRecord(std::thread::id owner, Input& i,
-            OperationState& s, Cases cases) 
+            OperationState s, Cases cases) 
     : ownerTid(owner),
     input(i),
     state(s),

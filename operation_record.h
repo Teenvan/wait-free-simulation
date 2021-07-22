@@ -23,7 +23,7 @@ namespace WaitFreeSimulation
             Cases casDescriptors;
 
             OperationRecord(std::thread::id owner, Input& i,
-            OperationState& s, Cases cases);
+            OperationState s, Cases cases);
             // Copy constructor
             OperationRecord(OperationRecord& otherRecord);   
     };
