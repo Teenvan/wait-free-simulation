@@ -4,13 +4,11 @@
 
 namespace WaitFreeSimulation
 {
-    template <class I, class O>
-    std::shared_ptr<OperationRecord<I, O> > WaitFreeQueue<I, O>::peek() const {
+    std::shared_ptr<OperationRecord> WaitFreeQueue::peek() const {
         return std::make_shared<OperationRecord>(0);
     }
 
-    template <class I, class O>
-    bool WaitFreeQueue<I, O>::tryRemoveFront(OperationRecordBox<I, O>* completed) {
+    bool WaitFreeQueue::tryRemoveFront(OperationRecordBox* completed) {
         // Returns true if succeeded else
         return false;
     }

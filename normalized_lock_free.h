@@ -5,7 +5,6 @@
 #include "cas_descriptor.h"
 #include "contention_measure.h"
 #include "operation.h"
-#include "result.h"
 #include <vector>
 
 namespace WaitFreeSimulation

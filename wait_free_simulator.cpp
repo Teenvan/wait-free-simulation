@@ -1,18 +1,17 @@
 #include "wait_free_simulator.h"
 #include "operation_record_box.h"
+#include "operation.h"
 #include <atomic>
 #include <utility>
 
 namespace WaitFreeSimulation
 {
-    template <class I, class O>
-    WaitFreeSimulator<I, O>::WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue<I, O> h)
+    WaitFreeSimulator::WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue h)
     : algorithm(std::move(l)),
     helpQueue(std::move(h))
     {}
 
-    template <class I, class O>
-    int WaitFreeSimulator<I, O>::casExecutor(const Cases &cases, ContentionMeasure& cm) const
+    int WaitFreeSimulator::casExecutor(const Cases &cases, ContentionMeasure& cm) const
     {
         for (const auto& cas : cases)
         {
@@ -31,8 +30,7 @@ namespace WaitFreeSimulation
         return 1;
     }
 
-    template <class I, class O>
-    void WaitFreeSimulator<I, O>::helpMakeProgress()
+    void WaitFreeSimulator::helpMakeProgress()
     {
         if (auto help = helpQueue.peek()) 
         {
@@ -40,8 +38,7 @@ namespace WaitFreeSimulation
         }
     }
 
-    template <class I, class O>
-    int WaitFreeSimulator<I, O>::run(Operation &op)
+    int WaitFreeSimulator::run(Operation &op)
     {
         // You can keep retrying the fast path
         // until a certain point which is based on contention
@@ -94,14 +91,13 @@ namespace WaitFreeSimulation
             // Error
             // slow-path : ask for help
             // rcode refers to the position where we started failing
-            OperationRecord<I, O> record(rcode);
-            OperationRecordBox<I, O> box(&record);
+            OperationRecord record(rcode);
+            OperationRecordBox box(&record);
             // Enqueue the pointer to the record box
             helpQueue.add(&box);
             // Using sequentially consistent ordering
             // While we haven't completed, we will keep on helping
-            while (!box.operationPointer()
-                            .load(std::memory_order_seq_cst)->completed)
+            while (!box.v.load(std::memory_order_seq_cst)->completed)
             {
                 // This will be a safe operation once we have hazard pointers
                 helpMakeProgress();
