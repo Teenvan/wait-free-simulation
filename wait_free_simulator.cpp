@@ -4,10 +4,9 @@
 
 namespace WaitFreeSimulation
 {
-    WaitFreeSimulator::WaitFreeSimulator(NormalizedLockFree l,
-    WaitFreeQueue h)
-    : algorithm {std::move(l)},
-    helpQueue {std::move(h)}
+    WaitFreeSimulator::WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue h)
+    : algorithm(std::move(l)),
+    helpQueue(std::move(h))
     {}
 
     int WaitFreeSimulator::casExecutor(const Cases &cases, ContentionMeasure& cm) const
@@ -39,22 +38,30 @@ namespace WaitFreeSimulation
 
     int WaitFreeSimulator::run(Operation &op)
     {
+        // You can keep retrying the fast path
+        // until a certain point which is based on contention
+        // or a predetermined retry threshold.
         int retry = 0;
         while (retry >= 0)
         {
-            bool helpNeeded = /* Once in a while */false;
-            if (retry == 0) {
-                if (helpNeeded)
-                {
-                    helpMakeProgress();
-                } else {
-                    // helping
-                }
+            bool helpNeeded = /* Once in a while */ true;
+            if (helpNeeded)
+            {
+                helpMakeProgress();
             }
-
             auto contention = ContentionMeasure();
+
+            if (contention.use_slow_path()) {
+                break;
+            }
             const auto& cases =  algorithm.generator(op, contention);
+            if (contention.use_slow_path()) {
+                break;
+            }
             const int rcode = casExecutor(cases, contention);
+            if (contention.use_slow_path()) {
+                break;
+            }
             const auto& result = algorithm.wrapUp(cases, rcode, contention);
 
             if (result != -1) {
@@ -64,23 +71,32 @@ namespace WaitFreeSimulation
                 continue;
             }
 
-            /*
-            if (rcode != -1)
-            {
-                // Error
-                // slow-path : ask for help
-                // rcode refers to the position where we started failing
-                Help help(rcode);
-                helpQueue.add(help);
-                // Using sequentially consistent ordering
-                while (!help.completed.load(std::memory_order_seq_cst))
-                {
-                    helpMakeProgress();
-                }
+            if (contention.use_slow_path()) { 
+                break;
             }
-            */
 
+            if (retry > RETRY_THRESHOLD) {
+                // slow path
+                break;
+            }
             ++retry;
+        }
+
+        // Slow Path
+        int rcode = 0;
+        if (rcode != -1)
+        {
+            // Error
+            // slow-path : ask for help
+            // rcode refers to the position where we started failing
+            OperationRecord record(rcode);
+            helpQueue.add(&record);
+            // Using sequentially consistent ordering
+            // While we haven't completed, we will keep on helping
+            while (!record.completed.load(std::memory_order_seq_cst))
+            {
+                helpMakeProgress();
+            }
         }
     }   
 }

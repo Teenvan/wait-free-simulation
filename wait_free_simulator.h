@@ -18,5 +18,6 @@ namespace WaitFreeSimulation
         private:
             NormalizedLockFree algorithm;
             WaitFreeQueue helpQueue;
+            const int RETRY_THRESHOLD = 2;
     };
 }

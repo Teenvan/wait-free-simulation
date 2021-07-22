@@ -12,8 +12,8 @@ namespace WaitFreeSimulation
     {
         public:
             // Add takes in a description of help
-            void add(Help& help);
-            std::shared_ptr<Help> peek() const;
-            void tryRemoveFront(Help completed);
+            void add(OperationRecord* help);
+            std::shared_ptr<OperationRecord> peek() const;
+            void tryRemoveFront(OperationRecord completed);
     };
 }

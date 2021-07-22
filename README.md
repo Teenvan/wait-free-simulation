@@ -1,6 +1,6 @@
 # Wait-free simulation for a Lock-free algorithm.
 
-Implementation of a wait-free simulation for a lock-free algorithm as described in the paper - A Practical Wait-Free Simulation for Lock-Free Data Structures
+Implementation of a wait-free simulation for a lock-free algorithm as described in the paper - A Practical Wait-Free Simulation for Lock-Free Data Structures. 
 
 # Components of the algorithm
 1. Normalized Lock Free Form

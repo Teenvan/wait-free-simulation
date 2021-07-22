@@ -5,11 +5,11 @@
 #include <atomic>
 namespace WaitFreeSimulation
 {
-    class Help
+    class OperationRecord
     {
         public:
             std::atomic<bool> completed;
             std::atomic<uint32_t> at;
-            Help(uint32_t current);      
+            OperationRecord(uint32_t current);      
     };
 }

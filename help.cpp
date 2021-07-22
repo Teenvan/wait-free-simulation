@@ -5,9 +5,9 @@
 
 namespace WaitFreeSimulation
 {
-    Help::Help(uint32_t current) 
-    : completed {false},
-    at {current}
+    OperationRecord::OperationRecord(uint32_t current) 
+    : completed(false),
+    at(current)
     {}
 
 }
