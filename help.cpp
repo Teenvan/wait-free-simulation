@@ -10,4 +10,8 @@ namespace WaitFreeSimulation
     at(current)
     {}
 
+    OperationRecord::OperationRecord(OperationRecord& otherRecord):
+    completed(otherRecord.completed), at(otherRecord.at)
+    {}
+
 }

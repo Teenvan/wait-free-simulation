@@ -4,8 +4,12 @@
 
 namespace WaitFreeSimulation
 {
-    std::shared_ptr<Help> WaitFreeQueue::peek() const {
-        return std::make_shared<Help>(0);
+    std::shared_ptr<OperationRecord> WaitFreeQueue::peek() const {
+        return std::make_shared<OperationRecord>(0);
     }
 
+    bool WaitFreeQueue::tryRemoveFront(OperationRecord& completed) {
+        // Returns true if succeeded else false
+        return false;
+    }
 }

@@ -5,6 +5,7 @@
 
 #include <string>
 #include "help.h"
+#include "operation_record_box.h"
 
 namespace WaitFreeSimulation
 {
@@ -12,8 +13,8 @@ namespace WaitFreeSimulation
     {
         public:
             // Add takes in a description of help
-            void add(OperationRecord* help);
+            void add(OperationRecordBox* help);
             std::shared_ptr<OperationRecord> peek() const;
-            void tryRemoveFront(OperationRecord completed);
+            bool tryRemoveFront(OperationRecord& completed);
     };
 }

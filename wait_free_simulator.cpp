@@ -1,4 +1,5 @@
 #include "wait_free_simulator.h"
+#include "operation_record_box.h"
 #include <atomic>
 #include <utility>
 
@@ -90,7 +91,8 @@ namespace WaitFreeSimulation
             // slow-path : ask for help
             // rcode refers to the position where we started failing
             OperationRecord record(rcode);
-            helpQueue.add(&record);
+            OperationRecordBox box(&record);
+            helpQueue.add(&box);
             // Using sequentially consistent ordering
             // While we haven't completed, we will keep on helping
             while (!record.completed.load(std::memory_order_seq_cst))
