@@ -3,7 +3,6 @@
 // A Wait-free queue that is required for the 
 // helper tasks
 
-#include <string>
 #include "operation_record.h"
 #include "operation_record_box.h"
 

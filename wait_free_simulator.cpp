@@ -1,4 +1,6 @@
 #include "wait_free_simulator.h"
+#include "wait_free_queue.h"
+#include "cas_descriptor.h"
 #include "operation_record_box.h"
 #include "operation.h"
 #include <atomic>
@@ -32,10 +34,10 @@ namespace WaitFreeSimulation
 
     void WaitFreeSimulator::helpMakeProgress()
     {
-        if (auto help = helpQueue.peek()) 
-        {
-            // Do something to help
-        }
+        // if (auto help = helpQueue.peek()) 
+        // {
+        //     // Do something to help
+        // }
     }
 
     int WaitFreeSimulator::run(Operation &op)
@@ -96,7 +98,7 @@ namespace WaitFreeSimulation
             // Enqueue the pointer to the record box
             helpQueue.add(&box);
             // Using sequentially consistent ordering
-            // While we haven't completed, we will keep on helping
+            // While we haven't completed, we will keep on helpin g
             while (!box.v.load(std::memory_order_seq_cst)->completed)
             {
                 // This will be a safe operation once we have hazard pointers

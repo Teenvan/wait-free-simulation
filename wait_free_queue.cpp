@@ -12,4 +12,9 @@ namespace WaitFreeSimulation
         // Returns true if succeeded else
         return false;
     }
+
+    void WaitFreeQueue::add(OperationRecordBox* record)
+    {
+        // Do something here.
+    }
 }
