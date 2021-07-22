@@ -4,13 +4,19 @@
 
 namespace WaitFreeSimulation
 {
-    OperationRecord::OperationRecord(uint64_t current) 
-    : completed(false),
-    at(current)
+    OperationRecord::OperationRecord(std::thread::id owner, Input& i,
+            OperationState& s, Cases cases) 
+    : ownerTid(owner),
+    input(i),
+    state(s),
+    casDescriptors(std::move(cases))
     {}
 
-    OperationRecord::OperationRecord(OperationRecord& otherRecord):
-    completed(otherRecord.completed), at(otherRecord.at)
+    OperationRecord::OperationRecord(OperationRecord& otherRecord)
+    : ownerTid(otherRecord.ownerTid),
+    input(otherRecord.input),
+    state(otherRecord.state),
+    casDescriptors(std::move(otherRecord.casDescriptors))
     {}
 
 }

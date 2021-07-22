@@ -2,6 +2,7 @@
 
 #include "normalized_lock_free.h"
 #include "wait_free_queue.h"
+#include "input.h"
 
 namespace WaitFreeSimulation
 {
@@ -11,7 +12,7 @@ namespace WaitFreeSimulation
 
         public:
             WaitFreeSimulator(NormalizedLockFree l, WaitFreeQueue h);
-            int run(Operation& op);
+            int run(Input& op);
             void helpMakeProgress();
             int casExecutor(const Cases& cases, ContentionMeasure& cm) const;
 

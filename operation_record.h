@@ -6,6 +6,7 @@
 #include "output.h"
 #include "cas_descriptor.h"
 #include <cstdint>
+#include <thread>
 
 namespace WaitFreeSimulation
 {   
@@ -15,14 +16,14 @@ namespace WaitFreeSimulation
 
         public:
             bool completed;
-            uint32_t at;
-            uint32_t ownerTid; // Owner thread identifier
+            std::thread::id ownerTid; // Owner thread identifier
             Input input; // Object with operation and input parameters
             OperationState state;
             Output out;
             Cases casDescriptors;
 
-            OperationRecord(uint64_t current);
+            OperationRecord(std::thread::id owner, Input& i,
+            OperationState& s, Cases cases);
             // Copy constructor
             OperationRecord(OperationRecord& otherRecord);   
     };

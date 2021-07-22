@@ -4,7 +4,7 @@
 
 #include "cas_descriptor.h"
 #include "contention_measure.h"
-#include "operation.h"
+#include "input.h"
 #include <vector>
 
 namespace WaitFreeSimulation
@@ -15,7 +15,7 @@ class NormalizedLockFree
 
     public:
 
-        Cases generator(const Operation& op, ContentionMeasure& cm) const;
+        Cases generator(const Input& op, ContentionMeasure& cm) const;
         // Wrap up takes in the outcome of the execution
         // Wrap runs regardless if execute succeeded or not
         int  wrapUp(const Cases& performed, int executed, ContentionMeasure& cm) const;
