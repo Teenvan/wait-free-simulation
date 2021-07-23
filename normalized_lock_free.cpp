@@ -2,16 +2,19 @@
     
 namespace WaitFreeSimulation
 {
-    std::variant<NormalizedLockFree::Cases, Contention> 
+    NormalizedLockFree::GeneratorOutput 
                 NormalizedLockFree::generator
                 (const Input& op, ContentionMeasure& cm) const
     {
         return ;
     }
 
-    int NormalizedLockFree::wrapUp(const Cases& performed, int executed, ContentionMeasure& cm) const
+    NormalizedLockFree::WrapUpOutput 
+                NormalizedLockFree::wrapUp(const Cases& performed, 
+                                           int executed, 
+                                           ContentionMeasure& cm) const
     {
         // Do something
-        return 0;
+        return;
     }
 }

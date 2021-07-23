@@ -126,14 +126,9 @@ namespace WaitFreeSimulation
             {
                 const auto& cases = std::get<Cases>(genVariant);
                 const int rcode = casExecutor(cases, contention);
-                const auto& result = algorithm.wrapUp(cases, rcode, contention);
-
-                if (result != -1) {
-                    // Wrap-up was successful
-                    return result;
-                } else {
-                    continue;
-                }
+                const auto& resultVariant = algorithm.wrapUp(cases, 
+                                                            rcode, contention);
+                
 
             } else if (std::holds_alternative<Contention>(genVariant))
             {

@@ -6,6 +6,7 @@
 #include "contention_measure.h"
 #include "contention.h"
 #include "input.h"
+#include "output.h"
 #include <vector>
 #include <variant>
 
@@ -14,14 +15,17 @@ namespace WaitFreeSimulation
 class NormalizedLockFree 
 {
     using Cases = std::vector<CasDescriptor>;
+    using WrapUpOutput = std::variant<Output, std::optional<Contention>>;
+    using GeneratorOutput = std::variant<Cases, Contention>;
 
     public:
 
-        std::variant<Cases, Contention> generator(const Input& op, 
+        GeneratorOutput generator(const Input& op, 
                                                 ContentionMeasure& cm) const;
         // Wrap up takes in the outcome of the execution
         // Wrap runs regardless if execute succeeded or not
-        int  wrapUp(const Cases& performed, int executed, 
+        WrapUpOutput wrapUp(const Cases& performed, 
+                                                int executed, 
                                                 ContentionMeasure& cm) const;
 };
 }
