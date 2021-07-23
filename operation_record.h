@@ -21,9 +21,10 @@ namespace WaitFreeSimulation
             OperationState state;
             Output out;
             Cases casDescriptors;
+            uint64_t failedIndex;
 
             OperationRecord(std::thread::id owner, Input& i,
-            OperationState s, Cases cases);
+            OperationState s, Cases cases, uint64_t failed);
             // Copy constructor
             OperationRecord(OperationRecord& otherRecord);
 

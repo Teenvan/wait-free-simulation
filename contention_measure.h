@@ -1,6 +1,7 @@
 #pragma once
 
-namespace WaitFreeSimulation {
+namespace WaitFreeSimulation
+{
     class ContentionMeasure
     {
         public:
