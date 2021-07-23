@@ -77,10 +77,11 @@ namespace WaitFreeSimulation
                 {
                     // Success
                     or_clone.state = OperationState::Completed;
-                    orb->v.compare_exchange_strong(_or, &or_clone);
                 } else {
                     // Failed. We need to restart from the generator.
+                    or_clone.state = OperationState::PreCas;
                 }
+                orb->v.compare_exchange_strong(_or, &or_clone);
                 break;
         }
     }
