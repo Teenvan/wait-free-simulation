@@ -1,12 +1,15 @@
 #pragma once
 
+#include <optional>
+#include "contention.h"
+
 namespace WaitFreeSimulation
 {
     class ContentionMeasure
     {
         public:
             ContentionMeasure();
-            void detected();
+            std::optional<Contention> detected();
             bool use_slow_path() const;
 
         private:

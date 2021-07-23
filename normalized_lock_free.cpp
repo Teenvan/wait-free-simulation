@@ -2,7 +2,9 @@
     
 namespace WaitFreeSimulation
 {
-    NormalizedLockFree::Cases NormalizedLockFree::generator(const Input& op, ContentionMeasure& cm) const
+    std::variant<NormalizedLockFree::Cases, Contention> 
+                NormalizedLockFree::generator
+                (const Input& op, ContentionMeasure& cm) const
     {
         return ;
     }

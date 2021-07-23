@@ -4,8 +4,8 @@
 
 namespace WaitFreeSimulation
 {
-    std::shared_ptr<OperationRecord> WaitFreeQueue::peek() const {
-        return ;
+    OperationRecordBox* WaitFreeQueue::peek() const {
+        return nullptr;
     }
 
     bool WaitFreeQueue::tryRemoveFront(OperationRecordBox* completed) {

@@ -5,9 +5,15 @@ namespace WaitFreeSimulation{
     : countContention(0) 
     {}
 
-    void ContentionMeasure::detected()
+    std::optional<Contention> ContentionMeasure::detected()
     {
         ++countContention;
+        if (countContention < THRESHOLD)
+        {
+            return std::nullopt;
+        } else {
+            return Contention();
+        }
     }
 
     bool ContentionMeasure::use_slow_path() const 

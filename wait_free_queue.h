@@ -13,7 +13,7 @@ namespace WaitFreeSimulation
         public:
             // Add takes in a description of help
             void add(OperationRecordBox* help);
-            std::shared_ptr<OperationRecord> peek() const;
+            OperationRecordBox* peek() const;
             bool tryRemoveFront(OperationRecordBox* completed);
     };
 }
