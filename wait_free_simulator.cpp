@@ -84,15 +84,25 @@ namespace WaitFreeSimulation
                     orb->v.compare_exchange_strong(_or, &or_clone);
                     break;
                 case OperationState::PostCas:
-                    auto res = algorithm.wrapUp(or_clone.casDescriptors, 
+                    const auto& resVariant = algorithm.wrapUp(or_clone.casDescriptors, 
                                                 or_clone.failedIndex, m);
-                    if (res == 0)
+    
+                    if (std::holds_alternative<Output>(resVariant))
                     {
                         // Success
                         or_clone.state = OperationState::Completed;
-                    } else {
-                        // Failed. We need to restart from the generator.
-                        or_clone.state = OperationState::PreCas;
+                    } else if (std::holds_alternative<std::optional<Contention>>(resVariant))
+                    {
+                        const auto& optContentional = std::get<std::optional<Contention>>(resVariant);
+                        if (optContentional.has_value())
+                        {
+                            // Exited because there was contention
+                            // Not up to us to restart 
+                            break;
+                        } else {
+                            // Failed. We need to restart from the generator.
+                            or_clone.state = OperationState::PreCas;
+                        }
                     }
                     orb->v.compare_exchange_strong(_or, &or_clone);
                     break;
