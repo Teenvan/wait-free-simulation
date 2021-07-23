@@ -75,13 +75,13 @@ namespace WaitFreeSimulation
                     // their version of the or.
                     // Hence, we require a compare_exchange
                     // It is fine if we fail here. 
-                    orb->v.compare_exchange_strong(_or, &or_clone);
+                    orb->v.compare_exchange_weak(_or, &or_clone);
                     break;
                 case OperationState::ExecuteCas:
                     or_clone.failedIndex = casExecutor(or_clone.casDescriptors
                                                                         , m);
                     or_clone.state = OperationState::PostCas;
-                    orb->v.compare_exchange_strong(_or, &or_clone);
+                    orb->v.compare_exchange_weak(_or, &or_clone);
                     break;
                 case OperationState::PostCas:
                     const auto& resVariant = algorithm.wrapUp(or_clone.casDescriptors, 
@@ -104,7 +104,7 @@ namespace WaitFreeSimulation
                             or_clone.state = OperationState::PreCas;
                         }
                     }
-                    orb->v.compare_exchange_strong(_or, &or_clone);
+                    orb->v.compare_exchange_weak(_or, &or_clone);
                     break;
             }
         }
